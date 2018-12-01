@@ -5,17 +5,25 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
-    <head>
-        <title>Objekti vezba - Simulacija voznje automobila</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            *{
+
+<head>
+    <title>Objekti vezba - Simulacija voznje automobila</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            background: green;
+        }
+        *{
                 box-sizing: border-box;
             }
             .container{
                 width: 100%;
                 margin: 0 auto;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
             .roud{
                 height: 200px;
@@ -80,7 +88,7 @@ and open the template in the editor.
                 border-radius:0;
                 padding: 5px 10px;
                 font-size: 16px;
-                background: blue;
+                background: #cccccc;
             }
             .form-control{
                 width: 250px;
@@ -109,11 +117,12 @@ and open the template in the editor.
             }
 
         </style>
-    </head>
-    <body>
-        <div class="container">
+</head>
 
-            <div class="form-group">
+<body>
+    <div class="container">
+
+        <div class="form-group">
             <select id="car-store" class="form-control" name="car-store">
                 <option value="">Izaberi model</option>
                 <option value="img/mercedes.png">Mercedes</option>
@@ -121,57 +130,122 @@ and open the template in the editor.
                 <option value="img/ford.jpg">Ford</option>
                 <option value="img/fiat.png">Fiat</option>
             </select>
-                <p class="error" id="car-error"></p>
-            </div>
-
-            <div  class="form-group">
-            <input type="text" class="form-control" id="potrosnja" value="" placeholder="Potrosnja na 100">
-            <p class="error" id="potrosnja-error"></p>
-            </div>
-            <div  class="form-group">
-            <input type="text" class="form-control" id="color" value="" placeholder="Boja kola">
-            <p class="error" id="color-error"></p>
-            </div>
-            <div  class="form-group">
-            <input type="text" class="form-control" id="doorNumber" value="" placeholder="Broj vrata">
-            <p class="error" id="door-error"></p>
-            </div>
-            <button>Izaberi auto</button>
-            
-            <div class="roud">
-                <div id="prepreka">
-                    
-                </div>
-                <div id="car">
-                    <div class="light" id="light1"></div>
-                    <div class="light" id="light2"></div>
-                    <div id="fuelBar">
-                        <div id="currenFuelState"></div>
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-            
-            <button>Kupi auto</button>
-            <button>Upali auto</button>
-            <button>Kreni</button>
-            <button>Zaustavi</button>
-            <button>Pretekni</button>
-            <button>Vrati se u svoju traku</button>
-            <button>Promeni brzinu</button>
-            <button>Ugasi auto</button>
-            
-            
-
-
+            <p class="error" id="car-error"></p>
         </div>
 
+        <div class="form-group">
+            <input type="text" class="form-control" id="potrosnja" value="" placeholder="Potrosnja na 100">
+            <p class="error" id="potrosnja-error"></p>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="color" value="" placeholder="Boja kola">
+            <p class="error" id="color-error"></p>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="doorNumber" value="" placeholder="Broj vrata">
+            <p class="error" id="door-error"></p>
+        </div>
+        <button id="izaberiAuto">Izaberi auto</button>
+
+        <div class="roud">
+            <div id="prepreka">
+
+            </div>
+            <div id="car">
+                <div class="light" id="light1"></div>
+                <div class="light" id="light2"></div>
+                <div id="fuelBar">
+                    <div id="currenFuelState"></div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <button id="buyCar">Kupi auto</button>
+        <button>Upali auto</button>
+        <button>Kreni</button>
+        <button>Zaustavi</button>
+        <button>Pretekni</button>
+        <button>Vrati se u svoju traku</button>
+        <button>Promeni brzinu</button>
+        <button>Ugasi auto</button>
 
 
-        <script>
-            
 
-        </script>
-    </body>
+
+    </div>
+
+
+
+    <script>
+        var car = {
+            'brand': 'img/mercedes.png',
+            'fuel': 'disel',
+            'color': 'white',
+            'potrosnja': 7,
+            'brojVrata': 5
+        };
+
+        document.getElementById('izaberiAuto').addEventListener('click', function () {
+            var error = 0;
+            var brand = document.getElementById('car-store').value;
+
+            if (brand.length == 0) {
+                error++;
+            }
+
+            var potrosnja = document.getElementById('potrosnja').value;
+            potrosnja = potrosnja.trim();
+
+            if (potrosnja.length == 0) {
+                error++;
+            }
+
+            if (isNaN(potrosnja)) {
+                error++;
+            }
+            potrosnja = parseInt(potrosnja);
+
+            var color = document.getElementById('color').value;
+            color = color.trim();
+
+            if (color.length === 0) {
+                error++;
+            }
+
+            var doors = document.getElementById('doorNumber').value;
+            doors = doors.trim();
+
+            if (doors.length === 0) {
+                error++;
+            }
+
+            if (isNaN(doors)) {
+                error++;
+            }
+
+            doors = parseInt(doors);
+
+            if (error === 0) {
+                car.brand = brand;
+                car.potrosnja = potrosnja;
+                car.color = color;
+                car.brojVrata = doors;
+                document.getElementById('car-store').value = '';
+                document.getElementById('potrosnja').value = '';
+                document.getElementById('color').value = '';
+                document.getElementById('doorNumber').value = '';
+
+            } else {
+                alert('Molimo da popunite sva polja sa pravim podacima');
+            }
+        });
+
+        document.getElementById('buyCar').addEventListener('click', function () {
+
+        });
+    </script>
+</body>
+
 </html>
