@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Objekti vezba - Simulacija voznje automobila</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            *{
+                box-sizing: border-box;
+            }
+            .container{
+                width: 100%;
+                margin: 0 auto;
+            }
+            .roud{
+                height: 200px;
+               
+                position: relative;
+                background: #222 url('img/line.png') repeat-x center
+            }
+
+
+            #car{
+                width: 5%;
+                height: 45px;
+                position: absolute;
+                bottom: 20px;
+                left: 0%;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                transition: 0.5s linear;
+            }
+
+            .light{
+                width: 6px;
+                height: 6px;
+                position: absolute;
+                right: 5px;
+                margin-top:-3px;
+                border-radius: 50%;
+            }
+
+            #light1{
+                top:9px;
+            }
+
+            #light2{
+                bottom: 9px;
+            }
+
+            #fuelBar{
+                position: absolute;
+                top:0;
+                left: 0;
+                width: 100%;
+                height: 3px;
+                background: #fff;
+                display: none;
+            }
+
+            #currenFuelState{
+                width: 100%;
+                height: 100%;
+                background: red;
+            }
+            .error{
+                color:red;
+            }
+            .form-group{
+                display: inline-block;
+            }
+            button{
+                border:1px solid #000;
+                border-radius:0;
+                padding: 5px 10px;
+                font-size: 16px;
+                background: blue;
+            }
+            .form-control{
+                width: 250px;
+                height: 30px;
+                border:1px solid #000;
+                margin-bottom: 10px;
+                margin-top: 10px;
+            }
+            
+            #prepreka{
+                width: 50px;
+                height: 50px;
+                position: absolute;
+                bottom: 5px;
+                left: 50%;
+                background: #fff;
+            }
+            
+            @keyframes migavac {
+                50% {background-color: transparent;}
+                100% {background-color: 'yellow';}
+            }
+            
+            .migavac{
+                animation: migavac 5 0.3s linear;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+
+            <div class="form-group">
+            <select id="car-store" class="form-control" name="car-store">
+                <option value="">Izaberi model</option>
+                <option value="img/mercedes.png">Mercedes</option>
+                <option value="img/bmw.png">BMW</option>
+                <option value="img/ford.jpg">Ford</option>
+                <option value="img/fiat.png">Fiat</option>
+            </select>
+                <p class="error" id="car-error"></p>
+            </div>
+
+            <div  class="form-group">
+            <input type="text" class="form-control" id="potrosnja" value="" placeholder="Potrosnja na 100">
+            <p class="error" id="potrosnja-error"></p>
+            </div>
+            <div  class="form-group">
+            <input type="text" class="form-control" id="color" value="" placeholder="Boja kola">
+            <p class="error" id="color-error"></p>
+            </div>
+            <div  class="form-group">
+            <input type="text" class="form-control" id="doorNumber" value="" placeholder="Broj vrata">
+            <p class="error" id="door-error"></p>
+            </div>
+            <button>Izaberi auto</button>
+            
+            <div class="roud">
+                <div id="prepreka">
+                    
+                </div>
+                <div id="car">
+                    <div class="light" id="light1"></div>
+                    <div class="light" id="light2"></div>
+                    <div id="fuelBar">
+                        <div id="currenFuelState"></div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            
+            <button>Kupi auto</button>
+            <button>Upali auto</button>
+            <button>Kreni</button>
+            <button>Zaustavi</button>
+            <button>Pretekni</button>
+            <button>Vrati se u svoju traku</button>
+            <button>Promeni brzinu</button>
+            <button>Ugasi auto</button>
+            
+            
+
+
+        </div>
+
+
+
+        <script>
+            
+
+        </script>
+    </body>
+</html>
