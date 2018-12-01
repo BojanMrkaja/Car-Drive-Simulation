@@ -115,7 +115,6 @@ and open the template in the editor.
             .migavac{
                 animation: migavac 5 0.3s linear;
             }
-
         </style>
 </head>
 
@@ -190,21 +189,30 @@ and open the template in the editor.
         document.getElementById('izaberiAuto').addEventListener('click', function () {
             var error = 0;
             var brand = document.getElementById('car-store').value;
+            var brandError = '';
+            var potrsnjaError = '';
+            var colorError = '';
+            var doorNumberError = '';
 
             if (brand.length == 0) {
                 error++;
+                brandError += 'Molim izaberite model auta';
+                document.getElementById('car-error').innerText = brandError;
+            } else {
+                document.getElementById('car-error').innerText = '';
             }
 
             var potrosnja = document.getElementById('potrosnja').value;
             potrosnja = potrosnja.trim();
 
-            if (potrosnja.length == 0) {
+            if (potrosnja.length == 0 || (isNaN(potrosnja))) {
                 error++;
+                potrsnjaError += 'Molim unesite iznos potrosnje u brojevima';
+                document.getElementById('potrosnja-error').innerText = potrsnjaError;
+            } else {
+                document.getElementById('potrosnja-error').innerText = '';
             }
 
-            if (isNaN(potrosnja)) {
-                error++;
-            }
             potrosnja = parseInt(potrosnja);
 
             var color = document.getElementById('color').value;
@@ -212,17 +220,21 @@ and open the template in the editor.
 
             if (color.length === 0) {
                 error++;
+                colorError += 'Molim unesite zeljenu boju';
+                document.getElementById('color-error').innerText = colorError;
+            } else {
+                document.getElementById('color-error').innerText = '';
             }
 
             var doors = document.getElementById('doorNumber').value;
             doors = doors.trim();
 
-            if (doors.length === 0) {
+            if (doors.length === 0 || (isNaN(doors))) {
                 error++;
-            }
-
-            if (isNaN(doors)) {
-                error++;
+                doorNumberError += 'Molim unesite broj vrata';
+                document.getElementById('door-error').innerText = doorNumberError;
+            } else {
+                document.getElementById('door-error').innerText = '';
             }
 
             doors = parseInt(doors);
@@ -236,14 +248,12 @@ and open the template in the editor.
                 document.getElementById('potrosnja').value = '';
                 document.getElementById('color').value = '';
                 document.getElementById('doorNumber').value = '';
-
-            } else {
-                alert('Molimo da popunite sva polja sa pravim podacima');
             }
         });
 
         document.getElementById('buyCar').addEventListener('click', function () {
-
+            document.getElementById('car').style.backgroundImage = 'url("' + car.brand + '")';
+            document.getElementById('fuelBar').style.display = 'block';
         });
     </script>
 </body>
