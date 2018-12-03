@@ -7,10 +7,12 @@ and open the template in the editor.
 <html>
 
 <head>
-    <title>Objekti vezba - Simulacija voznje automobila</title>
+    <title>Simulacija voznje automobila</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
+
         body{
             background: green;
         }
@@ -31,8 +33,6 @@ and open the template in the editor.
                 position: relative;
                 background: #222 url('img/line.png') repeat-x center
             }
-
-
             #car{
                 width: 5%;
                 height: 45px;
@@ -44,7 +44,6 @@ and open the template in the editor.
                 background-repeat: no-repeat;
                 transition: 0.5s linear;
             }
-
             .light{
                 width: 6px;
                 height: 6px;
@@ -53,26 +52,22 @@ and open the template in the editor.
                 margin-top:-3px;
                 border-radius: 50%;
             }
-
             #light1{
                 top:9px;
             }
-
             #light2{
                 bottom: 9px;
             }
-
             #fuelBar{
                 position: absolute;
                 top:0;
                 left: 0;
                 width: 100%;
                 height: 3px;
-                background: #fff;
+                background: white;
                 display: none;
             }
-
-            #currenFuelState{
+            #currentFuelState{
                 width: 100%;
                 height: 100%;
                 background: red;
@@ -115,7 +110,14 @@ and open the template in the editor.
             .migavac{
                 animation: migavac 5 0.3s linear;
             }
+
+            .yellow{
+                background: yellow;
+            }
         </style>
+
+
+    </style>
 </head>
 
 <body>
@@ -154,7 +156,7 @@ and open the template in the editor.
                 <div class="light" id="light1"></div>
                 <div class="light" id="light2"></div>
                 <div id="fuelBar">
-                    <div id="currenFuelState"></div>
+                    <div id="currentFuelState"></div>
                 </div>
             </div>
         </div>
@@ -162,13 +164,15 @@ and open the template in the editor.
         <hr>
 
         <button id="buyCar">Kupi auto</button>
-        <button>Upali auto</button>
-        <button>Kreni</button>
-        <button>Zaustavi</button>
-        <button>Pretekni</button>
-        <button>Vrati se u svoju traku</button>
-        <button>Promeni brzinu</button>
-        <button>Ugasi auto</button>
+        <button id="startCar">Upali auto</button>
+        <button id="go">Kreni</button>
+        <button id="stopMove">Zaustavi</button>
+        <button id="pretekni">Pretekni</button>
+        <button id="vsust">Vrati se u svoju traku</button>
+        <button id="promeniBrzinu">Promeni brzinu</button>
+        <button id="stopCar">Ugasi auto</button>
+        <button id="rikverc">Rikverc</button>
+        <button id="dopuniGorivo">Dopuni gorivo</button>
 
 
 
@@ -178,12 +182,82 @@ and open the template in the editor.
 
 
     <script>
+        var fuelInterval;
+        var fuelGas = 100;
+        var position = 0;
+        var speed = 1;
+        var stop;
+        var isBought = false;
+
         var car = {
             'brand': 'img/mercedes.png',
             'fuel': 'disel',
             'color': 'white',
             'potrosnja': 7,
-            'brojVrata': 5
+            'brojVrata': 5,
+            'upaliAuto': function () {
+                if(isBought){
+                    document.getElementById('light1').className = 'light yellow';
+                    document.getElementById('light2').className = 'light yellow';
+                    fuelInterval = setInterval(function () {
+                    car.emptyTank();
+                }, 1000);
+                }
+            },
+            'emptyTank': function () {
+                if (fuelGas > 0) {
+                    fuelGas = fuelGas - this.potrosnja / 10;
+                    document.getElementById('currentFuelState').style.width = fuelGas + '%';
+                } else {
+                    clearInterval(fuelInterval);
+                    clearInterval(stop);
+                    this.ugasiAuto();
+                    tankFuels();
+                }
+            },
+            'ugasiAuto': function(){
+                document.getElementById('light1').className = ('');
+                document.getElementById('light2').className = ('');
+                clearInterval(fuelInterval);
+                clearInterval(stop);
+               
+            },
+            'move': function (){
+               if(isBought){
+                stop = setInterval(moveCar, 200);
+               }
+            },
+            'stopCar': function(){
+                clearInterval(stop);
+            },
+            'pretekni':function(){
+                if(isBought){
+                    document.getElementById('light1').className = 'light yellow migavac';
+                    document.getElementById('light2').className = 'light yellow';
+                    setTimeout(function(){
+                    document.getElementById('car').style.bottom = '120px';
+                },1000)
+                }
+             
+            },
+            'vartiSeTraku': function(){
+                if(isBought){
+                    document.getElementById('light1').className = 'light yellow';
+                    document.getElementById('light2').className = 'light yellow migavac';
+                    setTimeout(function(){
+                    document.getElementById('car').style.bottom = '20px';
+                },1000)
+                }
+            },
+            'promeniBrzinu': function(){
+                if(speed < 5){
+                    speed ++;
+                }
+            },
+            'reverse': function (){
+                speed = -1;
+            }
+
         };
 
         document.getElementById('izaberiAuto').addEventListener('click', function () {
@@ -254,7 +328,50 @@ and open the template in the editor.
         document.getElementById('buyCar').addEventListener('click', function () {
             document.getElementById('car').style.backgroundImage = 'url("' + car.brand + '")';
             document.getElementById('fuelBar').style.display = 'block';
+            isBought = true;
         });
+
+        document.getElementById('startCar').addEventListener('click', car.upaliAuto);
+        document.querySelector('#stopCar').addEventListener('click', car.ugasiAuto);
+
+         function moveCar(){
+            document.getElementById('car').style.left = position + '%';
+            position = position + speed;
+        };
+
+        document.querySelector('#go').addEventListener('click', car.move);
+        document.querySelector('#stopMove').addEventListener('click', car.stopCar);
+
+
+        document.getElementById('pretekni').addEventListener('click', car.pretekni);
+        document.getElementById('vsust').addEventListener('click', car.vartiSeTraku);
+        document.getElementById('promeniBrzinu').addEventListener('click', car.promeniBrzinu);
+        document.getElementById('rikverc').addEventListener('click', car.reverse);
+
+        function tankFuels(){
+            if(isBought){
+                var refill = prompt('Dopuni gorivo');
+            if(isNaN(refill) || refill < 1){
+              alert('molimo unesite koliko zelite da dopunite goriva');
+              refill = prompt('Dopuni gorivo');
+            }
+            refill = parseInt(refill);
+            if(refill < fuelGas){
+                alert('Vas auto ima dovoljno goriva');
+                return;
+            }
+            if(refill > 0 && refill < 101){
+                fuelGas = refill;
+                document.getElementById('currentFuelState').style.width = fuelGas + '%';
+            }else{
+                fuelGas = 100;
+                document.getElementById('currentFuelState').style.width = fuelGas + '%';
+            }
+            } 
+        }
+
+        document.getElementById('dopuniGorivo').addEventListener('click', tankFuels);
+
     </script>
 </body>
 
